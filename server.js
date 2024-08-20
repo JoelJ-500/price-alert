@@ -40,4 +40,3 @@ const productRoutes = require('./routes/productRoutes');
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
