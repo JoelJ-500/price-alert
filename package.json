@@ -1,7 +1,7 @@
 {
   "name": "price-alert",
   "version": "1.0.0",
-  "description": "App architecture:",
+  "description": "Price tracking app that detects price changes:",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
