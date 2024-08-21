@@ -1,4 +1,5 @@
 import scrapy
+import requests
 
 class PriceSpider(scrapy.Spider):
     name = 'price_spider'
@@ -19,8 +20,10 @@ class PriceSpider(scrapy.Spider):
         # Handle cases of DOM changing
         # Handle DOM locations of multiple websites
 
-        yield {
+        # Send data to Node.js backend
+        data = {
             'product_name': product_name,
             'price': price,
             'url': response.url
         }
+        requests.post('http://localhost:5000/api/products/update', json=data)
