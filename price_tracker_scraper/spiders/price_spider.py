@@ -16,6 +16,8 @@ class PriceSpider(scrapy.Spider):
     def parse(self, response):
         product_name = response.css('h1::text').get()  # Put DOM location of product name here
         price = response.css('.price::text').get()  # Put DOM location of price here
+        # Handle cases of DOM changing
+        # Handle DOM locations of multiple websites
 
         yield {
             'product_name': product_name,
