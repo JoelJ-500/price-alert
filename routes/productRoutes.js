@@ -15,3 +15,22 @@ router.post('/add', async (req, res) => {
 });
 
 module.exports = router;
+
+// Handle product data scraped from web spider
+router.post('/update', async (req, res) => {
+  const { product_name, price, url } = req.body;
+  try {
+    const product = await Product.findOne({ productLink: url });
+    if (product) {
+      product.currentPrice = price;
+      product.priceHistory.push({ price });
+      await product.save();
+      res.json({ msg: 'Product updated' });
+    } else {
+      res.status(404).json({ msg: 'Product not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
