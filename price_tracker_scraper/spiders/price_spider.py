@@ -18,7 +18,7 @@ class PriceSpider(scrapy.Spider):
         product_name = response.css('h1::text').get()  # Put DOM location of product name here
         price = response.css('.price::text').get()  # Put DOM location of price here
         # Handle cases of DOM changing
-        # Handle DOM locations of multiple websites
+        # Handle DOM locations of multiple retailers
 
         # Send data to Node.js backend
         data = {
