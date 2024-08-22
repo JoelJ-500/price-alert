@@ -19,7 +19,6 @@ app.listen(PORT, () => {  // Start the server and listen on the specified port
 });
 
 
-
 // connect to mongodb
 const mongoose = require('mongoose');
 
@@ -32,7 +31,6 @@ mongoose.connect('mongodb://localhost:27017/myDatabase', {
 .catch(err => console.error(err));
 
 
-
 // Create routes to user and product database, to handle HTTP connections
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -40,3 +38,13 @@ const productRoutes = require('./routes/productRoutes');
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 
+
+// Create the price updater object
+const updatePrices = require('./priceUpdater');
+const cron = require('node-cron');  // package that run tasks at intervals
+
+// Shedule the updater to run at specfied interval (For now set at 6 hours)
+cron.schedule('0 */6 * * *', () => {
+  console.log('Running price updater...');
+  updatePrices();
+});
