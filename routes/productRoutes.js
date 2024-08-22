@@ -34,3 +34,23 @@ router.post('/update', async (req, res) => {
   }
 });
 
+// Adjust the price history based on the tracking interval when sending data to the frontend
+router.get('/:productId', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.productId).populate('usersTracking.userId');
+    if (!product) return res.status(404).json({ msg: 'Product not found' });
+
+    // Filter price history based on the user's tracking start and interval
+    const userTracking = product.usersTracking.find(u => u.userId._id.equals(req.user.id));
+    const relevantHistory = product.priceHistory.filter(p => 
+      p.timestamp >= userTracking.trackingStart && 
+      p.timestamp % userTracking.trackingInterval === 0
+    );
+
+    res.json({ product, relevantHistory });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+
