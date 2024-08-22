@@ -53,4 +53,15 @@ router.get('/:productId', async (req, res) => {
   }
 });
 
+//Use MongoDB sort to fetch product listings with the latest price changes
+router.get('/dashboard', async (req, res) => {
+  try {
+    const products = await Product.find()
+      .sort({ 'priceHistory.timestamp': -1 })
+      .limit(10);
 
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
