@@ -21,3 +21,17 @@ router.post('/register', async (req, res) => {
 });
 
 module.exports = router;
+
+// Edit user settings/preferences for time intervals
+router.post('/settings', async (req, res) => {
+  const { updateInterval } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    user.updateInterval = updateInterval;
+    await user.save();
+    res.json({ msg: 'Settings updated' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+

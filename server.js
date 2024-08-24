@@ -43,8 +43,15 @@ app.use('/api/products', productRoutes);
 const updatePrices = require('./priceUpdater');
 const cron = require('node-cron');  // package that run tasks at intervals
 
-// Shedule the updater to run at specfied interval (For now set at 6 hours)
-cron.schedule('0 */6 * * *', () => {
-  console.log('Running price updater...');
-  updatePrices();
-});
+// Shedule the updater to run at specfied interval
+async function scheduleUpdates() {
+  const users = await User.find();
+  users.forEach(user => {
+    cron.schedule(`0 */${user.updateInterval} * * *`, () => {
+      console.log(`Running price updater for user ${user._id} every ${user.updateInterval} hours...`);
+      updatePrices(user._id);
+    });
+  });
+}
+
+scheduleUpdates();
