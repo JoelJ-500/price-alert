@@ -18,6 +18,9 @@ app.listen(PORT, () => {  // Start the server and listen on the specified port
   console.log(`Server running on port ${PORT}`);  // Log a message when the server is running
 });
 
+//NOTE: Is the correct time to call when server boots up, or do we need to call when user actually registers
+const authRoutes = require('./routes/auth');
+app.use('/api/users', authRoutes);
 
 // connect to mongodb
 const mongoose = require('mongoose');
