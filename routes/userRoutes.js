@@ -116,6 +116,7 @@ router.post('/settings', async (req, res) => {
   }
 });
 
+const auth = require('../middleware/auth');
 // Add protected route
 router.get('/dashboard', auth, async (req, res) => {
   // Protected route logic here
