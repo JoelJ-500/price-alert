@@ -43,7 +43,7 @@ app.use('/api/products', productRoutes);
 
 
 // Create the price updater object
-const updatePrices = require('./priceUpdater');
+const updatePrices = require('./services/priceUpdater');
 const cron = require('node-cron');  // package that run tasks at intervals
 
 // Shedule the updater to run at specfied interval
