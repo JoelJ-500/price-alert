@@ -116,4 +116,9 @@ router.post('/settings', async (req, res) => {
   }
 });
 
+// Add protected route
+router.get('/dashboard', auth, async (req, res) => {
+  // Protected route logic here
+});
+
 module.exports = router;
