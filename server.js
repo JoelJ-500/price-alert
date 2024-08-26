@@ -47,6 +47,7 @@ const updatePrices = require('./services/priceUpdater');
 const cron = require('node-cron');  // package that run tasks at intervals
 
 // Shedule the updater to run at specfied interval
+const User = require('./models/User')
 async function scheduleUpdates() {
   const users = await User.find();
   users.forEach(user => {
