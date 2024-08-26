@@ -17,4 +17,19 @@ function updatePrices() {
   });
 }
 
+//Add the email alert system when price changes
+const sendPriceAlert = require('./sendPriceAlert');
+
+async function updatePrices(userId) {
+  const user = await User.findById(userId);
+  const products = await Product.find({ _id: { $in: user.trackedProducts } });
+
+  products.forEach(product => {
+    const lastPrice = product.priceHistory[product.priceHistory.length - 1].price;
+    if (product.currentPrice < lastPrice) {
+      sendPriceAlert(user.email, product.name, lastPrice, product.currentPrice);
+    }
+  });
+}
+
 module.exports = updatePrices;
