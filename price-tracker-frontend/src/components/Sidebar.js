@@ -6,7 +6,7 @@ function Sidebar() {
     <div>
       <ul>
         <li><Link to="/dashboard">Dashboard</Link></li>
-        {/* Add more links here for other features or pages */}
+        {/* Add every product user is tracking */}
       </ul>
     </div>
   );
