@@ -1,20 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const User = require('../models/User');
 
 // Add a new product
 router.post('/add', async (req, res) => {
-  const { name, originalPrice, currentPrice, domLocation, productLink } = req.body;
+  const { userId, productData } = req.body;
+
   try {
-    const product = new Product({ name, originalPrice, currentPrice, domLocation, productLink });
-    await product.save();
-    res.json(product);
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    const product = await Product.create(productData);
+    await User.findByIdAndUpdate(userId, { $push: { trackedProducts: product._id } });
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding product', error });
   }
 });
 
-module.exports = router;
+// Update a product's details
+router.put('/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const product = await Product.findByIdAndUpdate(id, updates, { new: true });
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating product', error });
+  }
+});
+
+// Delete a tracked product
+router.delete('/delete/:id', async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  try {
+    await Product.findByIdAndDelete(id);
+    await User.findByIdAndUpdate(userId, { $pull: { trackedProducts: id } });
+    res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting product', error });
+  }
+});
 
 // Handle product data scraped from web spider
 router.post('/update', async (req, res) => {
@@ -65,3 +92,6 @@ router.get('/dashboard', async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
+
+
+module.exports = router;
