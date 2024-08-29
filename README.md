@@ -1,65 +1,45 @@
-App architecture:
+# Price Tracker Web Application
 
-Front-end (Dynamic page that updates periodically by making requests to Mediator):
-- Sidebar:
-  - Link to the dashboard
-  - Every other element in the sidebar is a link to the specific product page.
+## Project Overview
 
-- Main Window, right of sidebar: Hosts the dashboard or selected product being tracked
-  - Dashboard: 
-    - Contains a table of tracked products. 
-    - The product with the latest price change is on the top of the table.
+The Price Tracker is a web application designed to help users track the prices of various products across multiple retailers (for now only Amazon, BestBuy, and Costco). The app allows users to monitor price changes, view historical price data, and receive alerts when the price of a tracked product changes.
 
-    - Row Format:
-      - Name(Links to product page or product source), 
-      - Original Price, Current Price, # Price Changes
-      - Percent change compared to original price
-  
-  - Product Page: Information on tracked product
-    - Contains name, original price, current price, #Price Changes.
-    - Graph of the price
-    - Table of time intervals where the price of the specific product, has changed.
-    - Row of Table:
-      - Time of price change.
-      - New Price
-      - Prev Price
-      - % of change, compard to the previous time change
+## Features
 
-- Top Bar:
-  - Icon of website: Links to Dashboard
-  - Next to icon: Search bar to search tracked products
-  - Far Right of Top Bar:
-    - Settings: Change alerting email etc. 
-    - User login- dropdown containing login or registration
+- **User Authentication**: Secure user registration and login with password encryption.
+- **Product Tracking**: Track products by entering a product link from supported retailers.
+- **Price History**: View the historical price data of tracked products.
+- **Custom Alerts**: Set custom time intervals to receive price alerts.
+- **Dashboard**: Manage all tracked products in a centralized dashboard.
+- **Scrapy Integration**: Utilizes Scrapy to scrape real-time prices from retailer websites.
+- **Responsive Design**: Accessible on both desktop and mobile devices.
 
-Back-end:
+## Project Architecture
 
-*Alot of the data need by front end, can be calculated by the client itself, based on the price history given by 
-product database. This saves computing resources on server.
+### Front-end
 
-Mediator(Model View Controller): handles interactions between front end and user database- getters and setters of database
+The front-end of the application is built with React and consists of the following components:
 
-Databases:
-- User: 
-  - Username and Password (Store this with encryption)
-  - Products being tracked by user- Search keys used to find the specific product in the 'Products' database.
-  - Email(s) to send alerts to. 
-  - Any other misc user settings
-- Products:
-  - 'Search key' that user database uses to find product: 
-    - Product Link: link to retailer selling product.
-  - DOM tree location of price element on retailer page. 
-  - Price history since the product was added to database. 
-  - Updates everything above at the smallest time interval selected.
-  - Users tracking the product
-    - For every user: price of product when it was added to database.
+- **Sidebar**: Contains links to the dashboard and product pages.
+- **Dashboard**: Displays all tracked products in a table format.
+- **Product Page**: Shows detailed information about each tracked product, including a graph of its price history.
+- **Top Bar**: Includes a search bar, settings, and user login/logout functionality.
 
-Price Updater: (Only interacts with 'Products' Database)
-- Updates price of every product in product database.
-  - Offer time intervals: 1 hour, 6 hours, 12 hours, 1 day
-  - Handle Price History Time Interval Conflicts: 
-      - If the product is tracked by multiple users with different time intervals,
-        it records a 'start' point that each user joined at, and only gives history from that point onwards
-  - Updates DOM tree location if price not found.
-- Adding or updating DOM tree location of product from product retailer web page, 
-  when new product added or current DOM tree location not found. (Use API like sp-api?)
+### Back-end
+
+The back-end is built with Node.js and Express.js, handling the following:
+
+- **User Authentication**: Managed via JWT and bcrypt for secure password handling.
+- **API Routes**: Exposes endpoints for managing products, users, and price updates.
+- **Price Updater Service**: Periodically updates product prices based on user-defined intervals.
+
+### Databases
+
+The application uses MongoDB to store:
+
+- **Users**: Usernames, passwords, tracked products, and alert settings.
+- **Products**: Product details, including price history and tracking users.
+
+### Price Scraper
+
+A Scrapy spider is used to scrape product prices from supported retailers. The spider fetches price data and updates the MongoDB database directly.
