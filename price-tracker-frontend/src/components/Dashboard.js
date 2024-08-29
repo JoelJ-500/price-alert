@@ -1,20 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import axios from 'axios';
+
+const addProduct = async (productData) => {
+    try {
+      const response = await axios.post('/api/products/add', { userId: user._id, productData });
+      console.log('Product added:', response.data);
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
+  };
+  
+  const updateProduct = async (productId, updates) => {
+    try {
+      const response = await axios.put(`/api/products/update/${productId}`, updates);
+      console.log('Product updated:', response.data);
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
+  };
+  
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await axios.delete(`/api/products/delete/${productId}`, { data: { userId: user._id } });
+      console.log('Product deleted:', response.data);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };  
 
 function Dashboard() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await api.get('/products');
-        setProducts(res.data);
-      } catch (err) {
-        console.error('Failed to fetch products', err);
-      }
-    };
-
-    fetchProducts();
+    axios.get('/api/user/products') // Example endpoint
+      .then(response => setProducts(response.data))
+      .catch(error => console.error('Error fetching products:', error));
   }, []);
 
   return (
@@ -32,12 +52,12 @@ function Dashboard() {
         </thead>
         <tbody>
           {products.map(product => (
-            <tr key={product._id}>
-              <td><a href={`/product/${product._id}`}>{product.name}</a></td>
+            <tr key={product.id}>
+              <td><a href={`/product/${product.id}`}>{product.name}</a></td>
               <td>{product.originalPrice}</td>
               <td>{product.currentPrice}</td>
-              <td>{product.priceChanges.length}</td>
-              <td>{(((product.currentPrice - product.originalPrice) / product.originalPrice) * 100).toFixed(2)}%</td>
+              <td>{product.priceChanges}</td>
+              <td>{product.percentChange}%</td>
             </tr>
           ))}
         </tbody>
