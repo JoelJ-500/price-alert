@@ -14,6 +14,17 @@ The Price Tracker is a web application designed to help users track the prices o
 - **Scrapy Integration**: Utilizes Scrapy to scrape real-time prices from retailer websites.
 - **Responsive Design**: Accessible on both desktop and mobile devices.
 
+## Action Plan
+- **Backend Development**: Utilized **Node.js and Express.js** to build a RESTful API that handled user authentication (JWT), managed product tracking data, and interfaced with **MongoDB for data storage**. Implemented robust services to periodically **scrape product prices using Scrapy, directly integrating the data into MongoDB**.
+
+- **Frontend Development**: Developed the user interface with **React.js**, creating dynamic components such as a Dashboard for managing tracked products, a Product Page to display price histories with data visualizations, and a responsive Sidebar for easy navigation.
+
+- **Data Integration**: Engineered a seamless connection between the backend and frontend, enabling real-time updates and data retrieval. Implemented a Price Updater Service that allowed users to set custom intervals (1 hour, 6 hours, 12 hours, 1 day) for receiving price alerts, ensuring that the users were always informed about price changes.
+
+- **Scrapy Spider Development**: Created a Scrapy Spider to scrape real-time prices from multiple retailers, handling various complexities such as DOM changes and API calls for data extraction. The spider was optimized for efficiency and accuracy, ensuring the latest price data was always available to users.
+
+- **Security**: Ensured secure data handling and implemented authentication measures using bcrypt for password encryption.
+
 ## Project Architecture
 
 ### Front-end
